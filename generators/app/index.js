@@ -10,11 +10,8 @@ const semver = require('semver');
 const BaseGenerator = require('generator-jhipster/generators/generator-base');
 const jhipsterConstants = require('generator-jhipster/generators/generator-constants');
 
-const INTERPOLATE_REGEX = jhipsterConstants.INTERPOLATE_REGEX;
 const SERVER_MAIN_SRC_DIR = jhipsterConstants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = jhipsterConstants.SERVER_MAIN_RES_DIR;
-const TEST_DIR = jhipsterConstants.TEST_DIR;
-const SERVER_TEST_SRC_DIR = jhipsterConstants.SERVER_TEST_SRC_DIR;
 
 const serverFiles = {
     server: [
@@ -94,7 +91,6 @@ module.exports = class extends BaseGenerator {
                 }
             },
             displayLogo() {
-                // console.log(this.context);
             },
             checkJhipster() {
                 const currentJhipsterVersion = this.jhipsterAppConfig.jhipsterVersion;
@@ -155,9 +151,9 @@ module.exports = class extends BaseGenerator {
         const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
 
         context.entityClass = context.entityNameCapitalized;
-        context.entityClassHumanized = _.startCase(context.entityNameCapitalized);
+        // context.entityClassHumanized = _.startCase(context.entityNameCapitalized);
         context.entityClassPlural = pluralize(context.entityClass);
-        context.entityClassPluralHumanized = _.startCase(context.entityClassPlural);
+        // context.entityClassPluralHumanized = _.startCase(context.entityClassPlural);
         context.entityInstance = _.lowerFirst(entityName);
         context.entityInstancePlural = pluralize(context.entityInstance);
         context.entityApiUrl = entityNamePluralizedAndSpinalCased;
@@ -337,7 +333,8 @@ module.exports = class extends BaseGenerator {
             if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' ||
                 (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
                 (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))) {
-                relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
+                // relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
+                relationship.otherEntityRelationshipNamePlural = relationship.relationshipName;
             }
 
             if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalized)) {
@@ -488,47 +485,12 @@ module.exports = class extends BaseGenerator {
         // use function in generator-base.js from generator-jhipster
         this.angularAppName = this.getAngularAppName();
 
-        // use constants from generator-constants.js
-        const javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
-        const resourceDir = jhipsterConstants.SERVER_MAIN_RES_DIR;
-        const webappDir = jhipsterConstants.CLIENT_MAIN_SRC_DIR;
-
-        // variable from questions
-        this.message = this.props.message;
-
-        // show all variables
-        this.log('\n--- some config read from config ---');
-        this.log(`baseName=${this.baseName}`);
-        this.log(`packageName=${this.packageName}`);
-        this.log(`clientFramework=${this.clientFramework}`);
-        this.log(`clientPackageManager=${this.clientPackageManager}`);
-        this.log(`buildTool=${this.buildTool}`);
-
-        this.log('\n--- some function ---');
-        this.log(`angularAppName=${this.angularAppName}`);
-
-        this.log('\n--- some const ---');
-        this.log(`javaDir=${javaDir}`);
-        this.log(`resourceDir=${resourceDir}`);
-        this.log(`webappDir=${webappDir}`);
-
-        this.log('\n--- variables from questions ---');
-        this.log(`\nmessage=${this.message}`);
-        this.log('------\n');
-
-        // console.log(this);
-
         if (this.skipServer) return;
 
         // write server side files
         this.writeFilesToDisk(serverFiles, this, false);
 
         if (this.databaseType === 'sql') {
-            if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
-                this.addConstraintsChangelogToLiquibase(`${this.changelogDate}_added_entity_constraints_${this.entityClass}`);
-            }
-            this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
-
             if (['ehcache', 'infinispan'].includes(this.cacheProvider) && this.enableHibernateCache) {
                 this.addEntityToCache(this.entityClass, this.relationships, this.packageName, this.packageFolder, this.cacheProvider);
             }
@@ -537,7 +499,6 @@ module.exports = class extends BaseGenerator {
             if (field.fieldIsEnum === true) {
                 const fieldType = field.fieldType;
                 const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
-                console.log(enumInfo);
                 if (!this.skipServer) {
                     this.template(
                         `${SERVER_MAIN_SRC_DIR}package/web/rest/dto/enumeration/Enum.java.ejs`,
@@ -547,35 +508,6 @@ module.exports = class extends BaseGenerator {
                 }
             }
         });
-    }
-
-    install() {
-        let logMsg =
-            `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
-
-        if (this.clientFramework === 'angular1') {
-            logMsg =
-                `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install & bower install`)}`;
-        }
-        const injectDependenciesAndConstants = (err) => {
-            if (err) {
-                this.warning('Install of dependencies failed!');
-                this.log(logMsg);
-            } else if (this.clientFramework === 'angular1') {
-                this.spawnCommand('gulp', ['install']);
-            }
-        };
-        const installConfig = {
-            bower: this.clientFramework === 'angular1',
-            npm: this.clientPackageManager !== 'yarn',
-            yarn: this.clientPackageManager === 'yarn',
-            callback: injectDependenciesAndConstants
-        };
-        if (this.options['skip-install']) {
-            this.log(logMsg);
-        } else {
-            this.installDependencies(installConfig);
-        }
     }
 
     end() {

@@ -1,7 +1,6 @@
 package <%=packageName%>.web.rest.client;
 
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
-
 <%_ if (saveUserSnapshot) { _%>
 import <%=packageName%>.repository.UserRepository;
 <%_ } _%>
@@ -61,7 +60,7 @@ public class <%= entityClass %>ClientFallback implements <%= entityClass %>Clien
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
      */
-    @PostMapping("/<%= entityApiUrl %>")
+    @Override
     public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) {
         log.warn("Triggered fallback for create<%= entityClass %>: {}", <%= instanceName %>);
         return null;
@@ -70,7 +69,7 @@ public class <%= entityClass %>ClientFallback implements <%= entityClass %>Clien
     /**
      * PUT  /<%= entityApiUrl %> : Updates an existing <%= entityInstance %>.
      */
-    @PutMapping("/<%= entityApiUrl %>")
+    @Override
     public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) {
         log.warn("Triggered fallback for update<%= entityClass %>: {}", <%= instanceName %>);
         return null;
@@ -79,7 +78,7 @@ public class <%= entityClass %>ClientFallback implements <%= entityClass %>Clien
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
      */
-    @GetMapping("/<%= entityApiUrl %>")<%_if (jpaMetamodelFiltering) {  %>
+    @Override<%_if (jpaMetamodelFiltering) {  %>
     public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>, Pageable pageable<% } %>) {
     <% } else { %>
         <%_ if (pagination === 'no') { _%>
@@ -96,7 +95,7 @@ public class <%= entityClass %>ClientFallback implements <%= entityClass %>Clien
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %> as a stream.
      */
-    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    @Override
     public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
         log.warn("Triggered fallback for getAll<%= entityClassPlural %>AsStream");
         return null;
@@ -105,7 +104,7 @@ public class <%= entityClass %>ClientFallback implements <%= entityClass %>Clien
     /**
      * GET  /<%= entityApiUrl %>/:id : get the "id" <%= entityInstance %>.
      */
-    @GetMapping("/<%= entityApiUrl %>/{id}")
+    @Override
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.warn("Triggered fallback for get<%= entityClass %>: {}", id);
         return null;
@@ -114,7 +113,7 @@ public class <%= entityClass %>ClientFallback implements <%= entityClass %>Clien
     /**
      * DELETE  /<%= entityApiUrl %>/:id : delete the "id" <%= entityInstance %>.
      */
-    @DeleteMapping("/<%= entityApiUrl %>/{id}")
+    @Override
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.warn("Triggered fallback for delete<%= entityClass %>: {}", id);
         return null;
@@ -125,7 +124,7 @@ public class <%= entityClass %>ClientFallback implements <%= entityClass %>Clien
     * SEARCH  /_search/<%= entityApiUrl %>?query=:query : search for the <%= entityInstance %> corresponding
      * to the query.
      */
-    @GetMapping("/_search/<%= entityApiUrl %>")
+    @Override
         <%_if (pagination === 'no') { %>
     public List<<%= instanceType %>> search<%= entityClassPlural %>(@RequestParam String query) {
         <% } if (pagination !== 'no') { %>

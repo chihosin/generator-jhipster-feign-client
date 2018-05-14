@@ -12,6 +12,7 @@ import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ if (jpaMetamodelFiltering) {  _%>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>Criteria;
 <%_ } _%>
+import org.springframework.http.MediaType;
 <%_ if (pagination !== 'no') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,19 +54,22 @@ public interface <%= entityClass %>Client {
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
      */
-    @PostMapping("/<%= entityApiUrl %>")
+    @RequestMapping(value = "/<%= entityApiUrl %>", method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>);
 
     /**
      * PUT  /<%= entityApiUrl %> : Updates an existing <%= entityInstance %>.
      */
-    @PutMapping("/<%= entityApiUrl %>")
+    @RequestMapping(value = "/<%= entityApiUrl %>", method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>);
 
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
      */
-    @GetMapping("/<%= entityApiUrl %>")<%_if (jpaMetamodelFiltering) {  %>
+    @RequestMapping(value = "/<%= entityApiUrl %>", method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)<%_if (jpaMetamodelFiltering) {  %>
     public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>, Pageable pageable<% } %>);
 <% } else { %>
     <%_ if (pagination === 'no') { _%>
@@ -79,19 +83,22 @@ public interface <%= entityClass %>Client {
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %> as a stream.
      */
-    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    @RequestMapping(value = "/<%= entityApiUrl %>", method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_STREAM_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream();
     <%_ } _%>
     /**
      * GET  /<%= entityApiUrl %>/:id : get the "id" <%= entityInstance %>.
      */
-    @GetMapping("/<%= entityApiUrl %>/{id}")
+    @RequestMapping(value = "/<%= entityApiUrl %>/{id}", method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id);
 
     /**
      * DELETE  /<%= entityApiUrl %>/:id : delete the "id" <%= entityInstance %>.
      */
-    @DeleteMapping("/<%= entityApiUrl %>/{id}")
+    @RequestMapping(value = "/<%= entityApiUrl %>/{id}", method = RequestMethod.DELETE,
+        produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id);
 
     <% if (searchEngine === 'elasticsearch') { %>
@@ -99,7 +106,8 @@ public interface <%= entityClass %>Client {
      * SEARCH  /_search/<%= entityApiUrl %>?query=:query : search for the <%= entityInstance %> corresponding
      * to the query.
      */
-    @GetMapping("/_search/<%= entityApiUrl %>")
+    @RequestMapping(value = "/_search/<%= entityApiUrl %>", method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     <%_if (pagination === 'no') { %>
     public List<<%= instanceType %>> search<%= entityClassPlural %>(@RequestParam String query);
     <% } if (pagination !== 'no') { %>

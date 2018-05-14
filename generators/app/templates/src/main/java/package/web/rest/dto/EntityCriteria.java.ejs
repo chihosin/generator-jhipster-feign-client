@@ -2,7 +2,7 @@ package <%= packageName %>.web.rest.dto;
 
 import java.io.Serializable;
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
-import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
+import <%= packageName %>.web.rest.dto.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
