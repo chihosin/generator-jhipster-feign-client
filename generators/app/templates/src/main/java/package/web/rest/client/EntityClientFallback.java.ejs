@@ -1,6 +1,5 @@
 package <%=packageName%>.web.rest.client;
 
-import <%=packageName%>.web.rest.client.<%= entityClass %>Client;
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 
 <%_ if (saveUserSnapshot) { _%>
@@ -9,13 +8,12 @@ import <%=packageName%>.repository.UserRepository;
 <% if (pagination !== 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 <%_ if (service === 'no') { _%>
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } } _%>
 <%_ if (jpaMetamodelFiltering) {  _%>
-import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
-import <%=packageName%>.service.<%= entityClass %>QueryService;
+import <%=packageName%>.web.rest.dto.<%= entityClass %>Criteria;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

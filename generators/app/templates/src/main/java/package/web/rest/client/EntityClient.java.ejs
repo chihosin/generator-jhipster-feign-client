@@ -10,8 +10,7 @@ import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } } _%>
 <%_ if (jpaMetamodelFiltering) {  _%>
-import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
-import <%=packageName%>.service.<%= entityClass %>QueryService;
+import <%=packageName%>.web.rest.dto.<%= entityClass %>Criteria;
 <%_ } _%>
 <%_ if (pagination !== 'no') { _%>
 import org.springframework.data.domain.Page;

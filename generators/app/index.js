@@ -79,7 +79,7 @@ module.exports = class extends BaseGenerator {
                 const context = this.context;
                 context.entityTableName = 'None';
                 context.prodDatabaseType = 'None';
-                context.databaseType = 'None';
+                context.databaseType = 'sql';
                 context.jhipsterConfigDirectory = '.jhipster';
                 context.filename = `${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
                 if (shelljs.test('-f', context.filename)) {
@@ -201,7 +201,7 @@ module.exports = class extends BaseGenerator {
         context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
 
         // Load in-memory data for fields
-        console.log(context);
+        // console.log(context);
         context.fields.forEach((field) => {
             // Migration from JodaTime to Java Time
             if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
@@ -255,7 +255,7 @@ module.exports = class extends BaseGenerator {
                 if (field.fieldName.length > 1) {
                     const firstLetter = field.fieldName.charAt(0);
                     const secondLetter = field.fieldName.charAt(1);
-                    console.log(secondLetter);
+                    // console.log(secondLetter);
                     if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
                         field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
                     } else {
@@ -516,7 +516,7 @@ module.exports = class extends BaseGenerator {
         this.log(`\nmessage=${this.message}`);
         this.log('------\n');
 
-        console.log(this);
+        // console.log(this);
 
         if (this.skipServer) return;
 
@@ -537,10 +537,11 @@ module.exports = class extends BaseGenerator {
             if (field.fieldIsEnum === true) {
                 const fieldType = field.fieldType;
                 const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
+                console.log(enumInfo);
                 if (!this.skipServer) {
                     this.template(
-                        `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
-                        `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
+                        `${SERVER_MAIN_SRC_DIR}package/web/rest/dto/enumeration/Enum.java.ejs`,
+                        `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/dto/enumeration/${fieldType}.java`,
                         this, {}, enumInfo
                     );
                 }
