@@ -51,7 +51,7 @@ MIT © [Chiho Sin](https://github.com/ChihoSin)
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-feign-client.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster-feign-client
-[travis-image]: https://travis-ci.org/chihosin/generator-jhipster-feign-client.svg?branch=master
-[travis-url]: https://travis-ci.org/chihosin/generator-jhipster-feign-client
+[travis-image]: https://travis-ci.org/ChihoSin/generator-jhipster-feign-client.svg?branch=master
+[travis-url]: https://travis-ci.org/ChihoSin/generator-jhipster-feign-client
 [daviddm-image]: https://david-dm.org/chihosin/generator-jhipster-feign-client.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/chihosin/generator-jhipster-feign-client

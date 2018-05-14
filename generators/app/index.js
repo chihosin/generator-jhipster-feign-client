@@ -11,7 +11,6 @@ const BaseGenerator = require('generator-jhipster/generators/generator-base');
 const jhipsterConstants = require('generator-jhipster/generators/generator-constants');
 
 const SERVER_MAIN_SRC_DIR = jhipsterConstants.SERVER_MAIN_SRC_DIR;
-const SERVER_MAIN_RES_DIR = jhipsterConstants.SERVER_MAIN_RES_DIR;
 
 const serverFiles = {
     server: [
@@ -393,15 +392,6 @@ module.exports = class extends BaseGenerator {
                             }
                         });
                     }
-                }
-            }
-
-            if (_.isUndefined(relationship.otherEntityAngularName)) {
-                if (relationship.otherEntityNameCapitalized !== 'User') {
-                    const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
-                    // relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + this.upperFirstCamelCase(otherEntityAngularSuffix);
-                } else {
-                    relationship.otherEntityAngularName = 'User';
                 }
             }
 
