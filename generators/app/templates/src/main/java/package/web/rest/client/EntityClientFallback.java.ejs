@@ -1,0 +1,140 @@
+package <%=packageName%>.web.rest.client;
+
+import <%=packageName%>.web.rest.client.<%= entityClass %>Client;
+import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
+
+<%_ if (saveUserSnapshot) { _%>
+import <%=packageName%>.repository.UserRepository;
+<%_ } _%>
+<% if (pagination !== 'no') { %>
+import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
+<%_ if (dto === 'mapstruct') { _%>
+import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+<%_ if (service === 'no') { _%>
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
+<%_ } } _%>
+<%_ if (jpaMetamodelFiltering) {  _%>
+import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
+import <%=packageName%>.service.<%= entityClass %>QueryService;
+<%_ } _%>
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+<%_ if (pagination !== 'no') { _%>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+<%_ } _%>
+<%_ if (reactiveRepositories) { _%>
+import org.springframework.http.MediaType;
+<%_ } _%>
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.*;
+<%_ if (reactiveRepositories) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
+
+<%_ if (validation) { _%>
+import javax.validation.Valid;
+<%_ } _%>
+<%_ const viaService = service !== 'no';
+if (pagination === 'no' && dto === 'mapstruct' && !viaService && fieldsContainNoOwnerOneToOne === true) { _%>
+import java.util.LinkedList;<% } %>
+import java.util.List;
+<% if (databaseType === 'cassandra') { %>
+import java.util.UUID;<% } %><% if (!viaService && (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true)) { %>
+import java.util.stream.Collectors;<% } %><% if (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true) { %>
+import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsearch') { %>
+import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
+
+/**
+ * Client Fallback for managing <%= entityClass %>.
+ */
+@Component
+public class <%= entityClass %>ClientFallback implements <%= entityClass %>Client {
+
+    private final Logger log = LoggerFactory.getLogger(<%= entityClass %>ClientFallback.class);
+
+    <%_
+    const instanceType = entityClass + 'DTO';
+    const instanceName = entityInstance + 'DTO';
+    _%>
+    /**
+     * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
+     */
+    @PostMapping("/<%= entityApiUrl %>")
+    public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) {
+        log.warn("Triggered fallback for create<%= entityClass %>: {}", <%= instanceName %>);
+        return null;
+    }
+
+    /**
+     * PUT  /<%= entityApiUrl %> : Updates an existing <%= entityInstance %>.
+     */
+    @PutMapping("/<%= entityApiUrl %>")
+    public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) {
+        log.warn("Triggered fallback for update<%= entityClass %>: {}", <%= instanceName %>);
+        return null;
+    }
+
+    /**
+     * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
+     */
+    @GetMapping("/<%= entityApiUrl %>")<%_if (jpaMetamodelFiltering) {  %>
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>, Pageable pageable<% } %>) {
+    <% } else { %>
+        <%_ if (pagination === 'no') { _%>
+    public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (fieldsContainOwnerManyToMany) { %>@RequestParam(required = false, defaultValue = "false") boolean eagerload<% }%>) {
+        <%_ } if (pagination !== 'no') { _%>
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany) { %>, @RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>) {
+        <%_ } _%>
+    <%_ } _%>
+        log.warn("Triggered fallback for getAll<%= entityClass %>");
+        return null;
+    }
+
+    <%_ if (reactiveRepositories) { _%>
+    /**
+     * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %> as a stream.
+     */
+    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
+        log.warn("Triggered fallback for getAll<%= entityClassPlural %>AsStream");
+        return null;
+    }
+    <%_ } _%>
+    /**
+     * GET  /<%= entityApiUrl %>/:id : get the "id" <%= entityInstance %>.
+     */
+    @GetMapping("/<%= entityApiUrl %>/{id}")
+    public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
+        log.warn("Triggered fallback for get<%= entityClass %>: {}", id);
+        return null;
+    }
+
+    /**
+     * DELETE  /<%= entityApiUrl %>/:id : delete the "id" <%= entityInstance %>.
+     */
+    @DeleteMapping("/<%= entityApiUrl %>/{id}")
+    public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
+        log.warn("Triggered fallback for delete<%= entityClass %>: {}", id);
+        return null;
+    }
+
+    <% if (searchEngine === 'elasticsearch') { %>
+    /**
+    * SEARCH  /_search/<%= entityApiUrl %>?query=:query : search for the <%= entityInstance %> corresponding
+     * to the query.
+     */
+    @GetMapping("/_search/<%= entityApiUrl %>")
+        <%_if (pagination === 'no') { %>
+    public List<<%= instanceType %>> search<%= entityClassPlural %>(@RequestParam String query) {
+        <% } if (pagination !== 'no') { %>
+    public ResponseEntity<List<<%= instanceType %>>> search<%= entityClassPlural %>(@RequestParam String query, Pageable pageable) {
+        <% } -%>
+        log.warn("Triggered fallback for search<%= entityClass %>: {}", query);
+        return null;
+    }
+    <% } %>
+}
