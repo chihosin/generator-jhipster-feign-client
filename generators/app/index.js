@@ -8,10 +8,9 @@ const utils = require('generator-jhipster/generators/utils');
 const packagejs = require('../../package.json');
 const semver = require('semver');
 const BaseGenerator = require('generator-jhipster/generators/generator-base');
-const jhipsterConstants = require('generator-jhipster/generators/generator-constants');
 
+const jhipsterConstants = require('generator-jhipster/generators/generator-constants');
 const SERVER_MAIN_SRC_DIR = jhipsterConstants.SERVER_MAIN_SRC_DIR;
-const SERVER_MAIN_RES_DIR = jhipsterConstants.SERVER_MAIN_RES_DIR;
 
 const serverFiles = {
     server: [
@@ -151,20 +150,14 @@ module.exports = class extends BaseGenerator {
         const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
 
         context.entityClass = context.entityNameCapitalized;
-        // context.entityClassHumanized = _.startCase(context.entityNameCapitalized);
         context.entityClassPlural = pluralize(context.entityClass);
-        // context.entityClassPluralHumanized = _.startCase(context.entityClassPlural);
         context.entityInstance = _.lowerFirst(entityName);
         context.entityInstancePlural = pluralize(context.entityInstance);
         context.entityApiUrl = entityNamePluralizedAndSpinalCased;
         context.entityFileName = _.kebabCase(context.entityNameCapitalized + _.upperFirst(context.entityAngularJSSuffix));
-        // context.entityFolderName = this.getEntityFolderName(context.clientRootFolder, context.entityFileName);
         context.entityModelFileName = context.entityFolderName;
-        // context.entityParentPathAddition = this.getEntityParentPathAddition(context.clientRootFolder);
         context.entityPluralFileName = entityNamePluralizedAndSpinalCased + context.entityAngularJSSuffix;
         context.entityServiceFileName = context.entityFileName;
-        // context.entityAngularName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
-        // context.entityReactName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
         context.entityStateName = _.kebabCase(context.entityAngularName);
         context.entityUrl = context.entityStateName;
         context.entityTranslationKey = context.clientRootFolder ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`) : context.entityInstance;
@@ -197,7 +190,6 @@ module.exports = class extends BaseGenerator {
         context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
 
         // Load in-memory data for fields
-        // console.log(context);
         context.fields.forEach((field) => {
             // Migration from JodaTime to Java Time
             if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
@@ -251,7 +243,6 @@ module.exports = class extends BaseGenerator {
                 if (field.fieldName.length > 1) {
                     const firstLetter = field.fieldName.charAt(0);
                     const secondLetter = field.fieldName.charAt(1);
-                    // console.log(secondLetter);
                     if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
                         field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
                     } else {
@@ -333,7 +324,6 @@ module.exports = class extends BaseGenerator {
             if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' ||
                 (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
                 (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))) {
-                // relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                 relationship.otherEntityRelationshipNamePlural = relationship.relationshipName;
             }
 
@@ -351,12 +341,6 @@ module.exports = class extends BaseGenerator {
                 otherEntityData.clientRootFolder = otherEntityData.microserviceName;
             }
             const jhiTablePrefix = context.jhiTablePrefix;
-
-            if (context.dto && context.dto === 'mapstruct') {
-                if (otherEntityData && (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct')) {
-                    this.warning(chalk.red(`This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`));
-                }
-            }
 
             if (otherEntityName === 'user') {
                 relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
@@ -393,15 +377,6 @@ module.exports = class extends BaseGenerator {
                             }
                         });
                     }
-                }
-            }
-
-            if (_.isUndefined(relationship.otherEntityAngularName)) {
-                if (relationship.otherEntityNameCapitalized !== 'User') {
-                    const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
-                    // relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + this.upperFirstCamelCase(otherEntityAngularSuffix);
-                } else {
-                    relationship.otherEntityAngularName = 'User';
                 }
             }
 
