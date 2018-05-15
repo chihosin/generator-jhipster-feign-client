@@ -1,6 +1,6 @@
 package <%=packageName%>.web.rest.client;
 
-import org.bigbug.organization.client.AuthorizedUserFeignClient;
+import <%=packageName%>.client.AuthorizedUserFeignClient;
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 <% if (pagination !== 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
