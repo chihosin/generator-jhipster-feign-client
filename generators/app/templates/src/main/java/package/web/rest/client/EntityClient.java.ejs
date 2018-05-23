@@ -70,12 +70,12 @@ public interface <%= entityClass %>Client {
      */
     @RequestMapping(value = "/<%= entityApiUrl %>", method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)<%_if (jpaMetamodelFiltering) {  %>
-    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>, Pageable pageable<% } %>);
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(@RequestParam("criteria") <%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>, Pageable pageable<% } %>);
 <% } else { %>
     <%_ if (pagination === 'no') { _%>
-    public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (fieldsContainOwnerManyToMany) { %>@RequestParam(required = false, defaultValue = "false") boolean eagerload<% }%>);
+    public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(value = "filter", required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (fieldsContainOwnerManyToMany) { %>@RequestParam(required = false, defaultValue = "false") boolean eagerload<% }%>);
     <%_ } if (pagination !== 'no') { _%>
-    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany) { %>, @RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>);
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(value = "filter", required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany) { %>, @RequestParam(value = "eagerload", required = false, defaultValue = "false") boolean eagerload<% } %>);
     <%_ } _%>
 <%_ } _%>
 
@@ -92,14 +92,14 @@ public interface <%= entityClass %>Client {
      */
     @RequestMapping(value = "/<%= entityApiUrl %>/{id}", method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id);
+    public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable("id") <%= pkType %> id);
 
     /**
      * DELETE  /<%= entityApiUrl %>/:id : delete the "id" <%= entityInstance %>.
      */
     @RequestMapping(value = "/<%= entityApiUrl %>/{id}", method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id);
+    public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable("id") <%= pkType %> id);
 
     <% if (searchEngine === 'elasticsearch') { %>
     /**
@@ -109,9 +109,9 @@ public interface <%= entityClass %>Client {
     @RequestMapping(value = "/_search/<%= entityApiUrl %>", method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     <%_if (pagination === 'no') { %>
-    public List<<%= instanceType %>> search<%= entityClassPlural %>(@RequestParam String query);
+    public List<<%= instanceType %>> search<%= entityClassPlural %>(@RequestParam("query") String query);
     <% } if (pagination !== 'no') { %>
-    public ResponseEntity<List<<%= instanceType %>>> search<%= entityClassPlural %>(@RequestParam String query, Pageable pageable);
+    public ResponseEntity<List<<%= instanceType %>>> search<%= entityClassPlural %>(@RequestParam("query") String query, Pageable pageable);
     <% } -%>
     <% } %>
 }
