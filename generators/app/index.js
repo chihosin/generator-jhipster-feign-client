@@ -1,15 +1,16 @@
-const chalk = require("chalk");
-const _ = require("lodash");
-const jhiCore = require("jhipster-core");
-const pluralize = require("pluralize");
-const path = require("path");
-const shelljs = require("shelljs");
-const utils = require("generator-jhipster/generators/utils");
-const packagejs = require("../../package.json");
-const semver = require("semver");
-const BaseGenerator = require("generator-jhipster/generators/generator-base");
+const chalk = require('chalk');
+const _ = require('lodash');
+const jhiCore = require('jhipster-core');
+const pluralize = require('pluralize');
+const path = require('path');
+const shelljs = require('shelljs');
+const utils = require('generator-jhipster/generators/utils');
+const packagejs = require('../../package.json');
+const semver = require('semver');
+const BaseGenerator = require('generator-jhipster/generators/generator-base');
 
-const jhipsterConstants = require("generator-jhipster/generators/generator-constants");
+const jhipsterConstants = require('generator-jhipster/generators/generator-constants');
+
 const SERVER_MAIN_SRC_DIR = jhipsterConstants.SERVER_MAIN_SRC_DIR;
 
 const serverFiles = {
@@ -19,7 +20,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/dto/EntityCriteria.java",
+                    file: 'package/web/rest/dto/EntityCriteria.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/dto/${
                             generator.entityClass
@@ -31,7 +32,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/dto/EntityDTO.java",
+                    file: 'package/web/rest/dto/EntityDTO.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/dto/${
                             generator.entityClass
@@ -43,7 +44,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/client/EntityClient.java",
+                    file: 'package/web/rest/client/EntityClient.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/client/${
                             generator.microserviceName
@@ -55,7 +56,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/client/EntityClientFallback.java",
+                    file: 'package/web/rest/client/EntityClientFallback.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/client/${
                             generator.microserviceName
@@ -72,7 +73,7 @@ const uaaServerFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/client/UaaAuthorityClient.java",
+                    file: 'package/web/rest/client/UaaAuthorityClient.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/client/${generator.uaaClassifyBaseName}AuthorityClient.java`
                 }
@@ -82,7 +83,7 @@ const uaaServerFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/client/UaaAuthorityClientFallback.java",
+                    file: 'package/web/rest/client/UaaAuthorityClientFallback.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/client/${generator.uaaClassifyBaseName}AuthorityClientFallback.java`
                 }
@@ -92,7 +93,7 @@ const uaaServerFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/client/UaaUserClient.java",
+                    file: 'package/web/rest/client/UaaUserClient.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/client/${generator.uaaClassifyBaseName}UserClient.java`
                 }
@@ -102,7 +103,7 @@ const uaaServerFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/client/UaaUserClientFallback.java",
+                    file: 'package/web/rest/client/UaaUserClientFallback.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/client/${generator.uaaClassifyBaseName}UserClientFallback.java`
                 }
@@ -112,7 +113,7 @@ const uaaServerFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/dto/AuthorityDTO.java",
+                    file: 'package/web/rest/dto/AuthorityDTO.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/dto/AuthorityDTO.java`
                 }
@@ -122,7 +123,7 @@ const uaaServerFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/dto/UserDTO.java",
+                    file: 'package/web/rest/dto/UserDTO.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/dto/UserDTO.java`
                 }
@@ -132,7 +133,7 @@ const uaaServerFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: "package/web/rest/dto/ManagedUsersAuthorityDTO.java",
+                    file: 'package/web/rest/dto/ManagedUsersAuthorityDTO.java',
                     renameTo: generator =>
                         `${generator.packageFolder}/web/rest/dto/ManagedUsersAuthorityDTO.java`
                 }
@@ -145,15 +146,15 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        if (opts["uaa-client"] && opts["uaa-base-name"]) {
-            this.uaaBaseName = opts["uaa-base-name"];
-            this.uaaClient = opts["uaa-client"];
+        if (opts['uaa-client'] && opts['uaa-base-name']) {
+            this.uaaBaseName = opts['uaa-base-name'];
+            this.uaaClient = opts['uaa-client'];
         } else {
             // This makes `name` a required argument.
-            this.argument("name", {
+            this.argument('name', {
                 type: String,
                 required: true,
-                description: "Entity name"
+                description: 'Entity name'
             });
         }
 
@@ -165,86 +166,48 @@ module.exports = class extends BaseGenerator {
         return {
             getConfig() {
                 const context = this.context;
-                context.entityTableName = "None";
-                context.prodDatabaseType = "None";
-                context.databaseType = "sql";
-                context.jhipsterConfigDirectory = ".jhipster";
+                context.entityTableName = 'None';
+                context.prodDatabaseType = 'None';
+                context.databaseType = 'sql';
+                context.jhipsterConfigDirectory = '.jhipster';
                 context.filename = `${context.jhipsterConfigDirectory}/${
                     context.entityNameCapitalized
                 }.json`;
-                if (shelljs.test("-f", context.filename)) {
-                    this.log(
-                        chalk.green(
-                            `\nFound the ${
-                                context.filename
-                            } configuration file, entity can be automatically generated!\n`
-                        )
-                    );
+                if (shelljs.test('-f', context.filename)) {
+                    this.log(chalk.green(`\nFound the ${
+                        context.filename
+                    } configuration file, entity can be automatically generated!\n`));
                     context.useConfigurationFile = true;
                 }
             },
             readConfig() {
                 this.jhipsterAppConfig = this.getJhipsterAppConfig();
                 if (!this.jhipsterAppConfig) {
-                    this.error("Can't read .yo-rc.json");
+                    this.error('Can\'t read .yo-rc.json');
                 }
             },
             displayLogo() {
-                this.log("");
-                this.log(
-                    `${chalk.blue("██████╗ ")}${chalk.red("██")}${chalk.blue(
-                        "╗ ██████╗ ██████╗ ██╗   ██╗ ██████╗ "
-                    )}`
-                );
-                this.log(
-                    `${chalk.blue(
-                        "██╔══██╗██║██╔════╝ ██╔══██╗██║   ██║██╔════╝ "
-                    )}`
-                );
-                this.log(
-                    `${chalk.blue(
-                        "██████╔╝██║██║  ███╗██████╔╝██║   ██║██║  ███╗"
-                    )}`
-                );
-                this.log(
-                    `${chalk.blue(
-                        "██╔══██╗██║██║   ██║██╔══██╗██║   ██║██║   ██║"
-                    )}`
-                );
-                this.log(
-                    `${chalk.blue(
-                        "██████╔╝██║╚██████╔╝██████╔╝╚██████╔╝╚██████╔╝"
-                    )}`
-                );
-                this.log(
-                    `${chalk.blue(
-                        "╚═════╝ ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝  ╚═════╝ "
-                    )}`
-                );
-                this.log(
-                    chalk.white(
-                        `Running ${chalk.bold.blue(
-                            "JHipster Feign Client"
-                        )} Generator! ${chalk.yellow(
-                            `v${packagejs.version}\n`
-                        )}`
-                    )
-                );
+                this.log('');
+                this.log(`${chalk.blue('██████╗ ')}${chalk.red('██')}${chalk.blue('╗ ██████╗ ██████╗ ██╗   ██╗ ██████╗ ')}`);
+                this.log(`${chalk.blue('██╔══██╗██║██╔════╝ ██╔══██╗██║   ██║██╔════╝ ')}`);
+                this.log(`${chalk.blue('██████╔╝██║██║  ███╗██████╔╝██║   ██║██║  ███╗')}`);
+                this.log(`${chalk.blue('██╔══██╗██║██║   ██║██╔══██╗██║   ██║██║   ██║')}`);
+                this.log(`${chalk.blue('██████╔╝██║╚██████╔╝██████╔╝╚██████╔╝╚██████╔╝')}`);
+                this.log(`${chalk.blue('╚═════╝ ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝  ╚═════╝ ')}`);
+                this.log(chalk.white(`Running ${chalk.bold.blue('JHipster Feign Client')} Generator! ${chalk.yellow(`v${packagejs.version}\n`)}`));
             },
             checkJhipster() {
                 const currentJhipsterVersion = this.jhipsterAppConfig
                     .jhipsterVersion;
                 const minimumJhipsterVersion =
-                    packagejs.dependencies["generator-jhipster"];
+                    packagejs.dependencies['generator-jhipster'];
                 if (
                     !semver.satisfies(
                         currentJhipsterVersion,
                         minimumJhipsterVersion
                     )
                 ) {
-                    this.warning(
-                        `\nYour generated project used an old JHipster version (${currentJhipsterVersion})... you need at least (${minimumJhipsterVersion})\n`
-                    );
+                    this.warning(`\nYour generated project used an old JHipster version (${currentJhipsterVersion})... you need at least (${minimumJhipsterVersion})\n`);
                 }
             }
         };
@@ -255,47 +218,39 @@ module.exports = class extends BaseGenerator {
         const prompts = this.uaaBaseName
             ? []
             : [
-                  {
-                      type: "input",
-                      name: "microservicePath",
-                      message:
-                          "Enter the path to the microservice root directory:",
-                      store: true,
-                      validate: input => {
-                          let fromPath = "";
-                          if (path.isAbsolute(input)) {
-                              fromPath = `${input}/${context.filename}`;
-                          } else {
-                              fromPath = this.destinationPath(
-                                  `${input}/${context.filename}`
-                              );
-                          }
+                {
+                    type: 'input',
+                    name: 'microservicePath',
+                    message:
+                          'Enter the path to the microservice root directory:',
+                    store: true,
+                    validate: (input) => {
+                        let fromPath = '';
+                        if (path.isAbsolute(input)) {
+                            fromPath = `${input}/${context.filename}`;
+                        } else {
+                            fromPath = this.destinationPath(`${input}/${context.filename}`);
+                        }
 
-                          if (shelljs.test("-f", fromPath)) {
-                              return true;
-                          }
-                          return `${context.filename} not found in ${input}/`;
-                      }
-                  }
-              ];
+                        if (shelljs.test('-f', fromPath)) {
+                            return true;
+                        }
+                        return `${context.filename} not found in ${input}/`;
+                    }
+                }
+            ];
 
         const done = this.async();
-        this.prompt(prompts).then(props => {
+        this.prompt(prompts).then((props) => {
             this.props = props;
             if (props.microservicePath) {
-                this.log(
-                    chalk.green(
-                        `\nFound the ${
-                            context.filename
-                        } configuration file, entity can be automatically generated!\n`
-                    )
-                );
+                this.log(chalk.green(`\nFound the ${
+                    context.filename
+                } configuration file, entity can be automatically generated!\n`));
                 if (path.isAbsolute(props.microservicePath)) {
                     context.microservicePath = props.microservicePath;
                 } else {
-                    context.microservicePath = path.resolve(
-                        props.microservicePath
-                    );
+                    context.microservicePath = path.resolve(props.microservicePath);
                 }
                 context.useConfigurationFile = true;
                 context.useMicroserviceJson = true;
@@ -324,9 +279,7 @@ module.exports = class extends BaseGenerator {
 
         if (!this.uaaClient) {
             const entityName = context.name;
-            const entityNamePluralizedAndSpinalCased = _.kebabCase(
-                pluralize(entityName)
-            );
+            const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
 
             context.microserviceName = utils.classify(context.microserviceName);
             context.entityClass = context.entityNameCapitalized;
@@ -334,10 +287,8 @@ module.exports = class extends BaseGenerator {
             context.entityInstance = _.lowerFirst(entityName);
             context.entityInstancePlural = pluralize(context.entityInstance);
             context.entityApiUrl = entityNamePluralizedAndSpinalCased;
-            context.entityFileName = _.kebabCase(
-                context.entityNameCapitalized +
-                    _.upperFirst(context.entityAngularJSSuffix)
-            );
+            context.entityFileName = _.kebabCase(context.entityNameCapitalized +
+                    _.upperFirst(context.entityAngularJSSuffix));
             context.entityModelFileName = context.entityFolderName;
             context.entityPluralFileName =
                 entityNamePluralizedAndSpinalCased +
@@ -346,19 +297,15 @@ module.exports = class extends BaseGenerator {
             context.entityStateName = _.kebabCase(context.entityAngularName);
             context.entityUrl = context.entityStateName;
             context.entityTranslationKey = context.clientRootFolder
-                ? _.camelCase(
-                      `${context.clientRootFolder}-${context.entityInstance}`
-                  )
+                ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`)
                 : context.entityInstance;
-            context.entityTranslationKeyMenu = _.camelCase(
-                context.clientRootFolder
-                    ? `${context.clientRootFolder}-${context.entityStateName}`
-                    : context.entityStateName
-            );
+            context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder
+                ? `${context.clientRootFolder}-${context.entityStateName}`
+                : context.entityStateName);
             context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
             context.reactiveRepositories =
-                context.applicationType === "reactive" &&
-                ["mongodb", "couchbase"].includes(context.databaseType);
+                context.applicationType === 'reactive' &&
+                ['mongodb', 'couchbase'].includes(context.databaseType);
 
             context.fieldsContainDate = false;
             context.fieldsContainInstant = false;
@@ -387,40 +334,38 @@ module.exports = class extends BaseGenerator {
             }`;
 
             // Load in-memory data for fields
-            context.fields.forEach(field => {
+            context.fields.forEach((field) => {
                 // Migration from JodaTime to Java Time
                 if (
-                    field.fieldType === "DateTime" ||
-                    field.fieldType === "Date"
+                    field.fieldType === 'DateTime' ||
+                    field.fieldType === 'Date'
                 ) {
-                    field.fieldType = "Instant";
+                    field.fieldType = 'Instant';
                 }
                 const fieldType = field.fieldType;
 
                 if (
-                    !["Instant", "ZonedDateTime", "Boolean"].includes(fieldType)
+                    !['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)
                 ) {
                     context.fieldsIsReactAvField = true;
                 }
 
                 const nonEnumType = [
-                    "String",
-                    "Integer",
-                    "Long",
-                    "Float",
-                    "Double",
-                    "BigDecimal",
-                    "LocalDate",
-                    "Instant",
-                    "ZonedDateTime",
-                    "Boolean",
-                    "byte[]",
-                    "ByteBuffer"
+                    'String',
+                    'Integer',
+                    'Long',
+                    'Float',
+                    'Double',
+                    'BigDecimal',
+                    'LocalDate',
+                    'Instant',
+                    'ZonedDateTime',
+                    'Boolean',
+                    'byte[]',
+                    'ByteBuffer'
                 ].includes(fieldType);
                 if (
-                    ["sql", "mongodb", "couchbase"].includes(
-                        context.databaseType
-                    ) &&
+                    ['sql', 'mongodb', 'couchbase'].includes(context.databaseType) &&
                     !nonEnumType
                 ) {
                     field.fieldIsEnum = true;
@@ -442,9 +387,7 @@ module.exports = class extends BaseGenerator {
 
                 if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
                     const fieldNameUnderscored = _.snakeCase(field.fieldName);
-                    const jhiFieldNamePrefix = this.getColumnName(
-                        context.jhiPrefix
-                    );
+                    const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
                     if (
                         jhiCore.isReservedTableName(
                             fieldNameUnderscored,
@@ -475,22 +418,18 @@ module.exports = class extends BaseGenerator {
                                 firstLetter.toLowerCase() +
                                 field.fieldName.slice(1);
                         } else {
-                            field.fieldInJavaBeanMethod = _.upperFirst(
-                                field.fieldName
-                            );
+                            field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
                         }
                     } else {
-                        field.fieldInJavaBeanMethod = _.upperFirst(
-                            field.fieldName
-                        );
+                        field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
                     }
                 }
 
                 if (_.isUndefined(field.fieldValidateRulesPatternJava)) {
                     field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
                         ? field.fieldValidateRulesPattern
-                              .replace(/\\/g, "\\\\")
-                              .replace(/"/g, '\\"')
+                            .replace(/\\/g, '\\\\')
+                            .replace(/"/g, '\\"')
                         : field.fieldValidateRulesPattern;
                 }
 
@@ -503,27 +442,27 @@ module.exports = class extends BaseGenerator {
                     field.fieldValidate = false;
                 }
 
-                if (fieldType === "ZonedDateTime") {
+                if (fieldType === 'ZonedDateTime') {
                     context.fieldsContainZonedDateTime = true;
                     context.fieldsContainDate = true;
-                } else if (fieldType === "Instant") {
+                } else if (fieldType === 'Instant') {
                     context.fieldsContainInstant = true;
                     context.fieldsContainDate = true;
-                } else if (fieldType === "LocalDate") {
+                } else if (fieldType === 'LocalDate') {
                     context.fieldsContainLocalDate = true;
                     context.fieldsContainDate = true;
-                } else if (fieldType === "BigDecimal") {
+                } else if (fieldType === 'BigDecimal') {
                     context.fieldsContainBigDecimal = true;
                 } else if (
-                    fieldType === "byte[]" ||
-                    fieldType === "ByteBuffer"
+                    fieldType === 'byte[]' ||
+                    fieldType === 'ByteBuffer'
                 ) {
                     context.blobFields.push(field);
                     context.fieldsContainBlob = true;
-                    if (field.fieldTypeBlobContent === "image") {
+                    if (field.fieldTypeBlobContent === 'image') {
                         context.fieldsContainImageBlob = true;
                     }
-                    if (field.fieldTypeBlobContent !== "text") {
+                    if (field.fieldTypeBlobContent !== 'text') {
                         context.fieldsContainBlobOrImage = true;
                     }
                 }
@@ -534,86 +473,60 @@ module.exports = class extends BaseGenerator {
             });
             context.hasUserField = context.saveUserSnapshot = false;
             // Load in-memory data for relationships
-            context.relationships.forEach(relationship => {
+            context.relationships.forEach((relationship) => {
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
-                    relationship.relationshipNameCapitalized = _.upperFirst(
-                        relationship.relationshipName
-                    );
+                    relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
                 }
 
                 if (
-                    _.isUndefined(
-                        relationship.relationshipNameCapitalizedPlural
-                    )
+                    _.isUndefined(relationship.relationshipNameCapitalizedPlural)
                 ) {
                     if (relationship.relationshipName.length > 1) {
-                        relationship.relationshipNameCapitalizedPlural = pluralize(
-                            _.upperFirst(relationship.relationshipName)
-                        );
+                        relationship.relationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.relationshipName));
                     } else {
-                        relationship.relationshipNameCapitalizedPlural = _.upperFirst(
-                            pluralize(relationship.relationshipName)
-                        );
+                        relationship.relationshipNameCapitalizedPlural = _.upperFirst(pluralize(relationship.relationshipName));
                     }
                 }
 
                 if (_.isUndefined(relationship.relationshipNameHumanized)) {
-                    relationship.relationshipNameHumanized = _.startCase(
-                        relationship.relationshipName
-                    );
+                    relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipNamePlural)) {
-                    relationship.relationshipNamePlural = pluralize(
-                        relationship.relationshipName
-                    );
+                    relationship.relationshipNamePlural = pluralize(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipFieldName)) {
-                    relationship.relationshipFieldName = _.lowerFirst(
-                        relationship.relationshipName
-                    );
+                    relationship.relationshipFieldName = _.lowerFirst(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipFieldNamePlural)) {
-                    relationship.relationshipFieldNamePlural = pluralize(
-                        _.lowerFirst(relationship.relationshipName)
-                    );
+                    relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
                 }
 
                 if (
-                    _.isUndefined(
-                        relationship.otherEntityRelationshipNamePlural
-                    ) &&
-                    (relationship.relationshipType === "one-to-many" ||
-                        (relationship.relationshipType === "many-to-many" &&
+                    _.isUndefined(relationship.otherEntityRelationshipNamePlural) &&
+                    (relationship.relationshipType === 'one-to-many' ||
+                        (relationship.relationshipType === 'many-to-many' &&
                             relationship.ownerSide === false) ||
-                        (relationship.relationshipType === "one-to-one" &&
+                        (relationship.relationshipType === 'one-to-one' &&
                             relationship.otherEntityName.toLowerCase() !==
-                                "user"))
+                                'user'))
                 ) {
                     relationship.otherEntityRelationshipNamePlural =
                         relationship.relationshipName;
                 }
 
                 if (
-                    _.isUndefined(
-                        relationship.otherEntityRelationshipNameCapitalized
-                    )
+                    _.isUndefined(relationship.otherEntityRelationshipNameCapitalized)
                 ) {
-                    relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(
-                        relationship.otherEntityRelationshipName
-                    );
+                    relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(relationship.otherEntityRelationshipName);
                 }
 
                 if (
-                    _.isUndefined(
-                        relationship.otherEntityRelationshipNameCapitalizedPlural
-                    )
+                    _.isUndefined(relationship.otherEntityRelationshipNameCapitalizedPlural)
                 ) {
-                    relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
-                        _.upperFirst(relationship.otherEntityRelationshipName)
-                    );
+                    relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityRelationshipName));
                 }
 
                 const otherEntityName = relationship.otherEntityName;
@@ -628,7 +541,7 @@ module.exports = class extends BaseGenerator {
                 }
                 const jhiTablePrefix = context.jhiTablePrefix;
 
-                if (otherEntityName === "user") {
+                if (otherEntityName === 'user') {
                     relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
                     context.hasUserField = true;
                 } else {
@@ -636,9 +549,7 @@ module.exports = class extends BaseGenerator {
                         ? otherEntityData.entityTableName
                         : null;
                     if (!relationship.otherEntityTableName) {
-                        relationship.otherEntityTableName = this.getTableName(
-                            otherEntityName
-                        );
+                        relationship.otherEntityTableName = this.getTableName(otherEntityName);
                     }
                     if (
                         jhiCore.isReservedTableName(
@@ -652,48 +563,36 @@ module.exports = class extends BaseGenerator {
                     }
                 }
                 context.saveUserSnapshot =
-                    context.applicationType === "microservice" &&
-                    context.authenticationType === "oauth2" &&
+                    context.applicationType === 'microservice' &&
+                    context.authenticationType === 'oauth2' &&
                     context.hasUserField;
 
                 if (_.isUndefined(relationship.otherEntityNamePlural)) {
-                    relationship.otherEntityNamePlural = pluralize(
-                        relationship.otherEntityName
-                    );
+                    relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
                 }
 
                 if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
-                    relationship.otherEntityNameCapitalized = _.upperFirst(
-                        relationship.otherEntityName
-                    );
+                    relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                 }
 
                 if (
-                    _.isUndefined(
-                        relationship.otherEntityRelationshipNamePlural
-                    )
+                    _.isUndefined(relationship.otherEntityRelationshipNamePlural)
                 ) {
-                    if (relationship.relationshipType === "many-to-one") {
+                    if (relationship.relationshipType === 'many-to-one') {
                         if (otherEntityData && otherEntityData.relationships) {
-                            otherEntityData.relationships.forEach(
-                                otherRelationship => {
-                                    if (
-                                        _.upperFirst(
-                                            otherRelationship.otherEntityName
-                                        ) === entityName &&
+                            otherEntityData.relationships.forEach((otherRelationship) => {
+                                if (
+                                    _.upperFirst(otherRelationship.otherEntityName) === entityName &&
                                         otherRelationship.otherEntityRelationshipName ===
                                             relationship.relationshipName &&
                                         otherRelationship.relationshipType ===
-                                            "one-to-many"
-                                    ) {
-                                        relationship.otherEntityRelationshipName =
+                                            'one-to-many'
+                                ) {
+                                    relationship.otherEntityRelationshipName =
                                             otherRelationship.relationshipName;
-                                        relationship.otherEntityRelationshipNamePlural = pluralize(
-                                            otherRelationship.relationshipName
-                                        );
-                                    }
+                                    relationship.otherEntityRelationshipNamePlural = pluralize(otherRelationship.relationshipName);
                                 }
-                            );
+                            });
                         }
                     }
                 }
@@ -701,34 +600,26 @@ module.exports = class extends BaseGenerator {
                 if (
                     _.isUndefined(relationship.otherEntityNameCapitalizedPlural)
                 ) {
-                    relationship.otherEntityNameCapitalizedPlural = pluralize(
-                        _.upperFirst(relationship.otherEntityName)
-                    );
+                    relationship.otherEntityNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityName));
                 }
 
                 if (_.isUndefined(relationship.otherEntityFieldCapitalized)) {
-                    relationship.otherEntityFieldCapitalized = _.upperFirst(
-                        relationship.otherEntityField
-                    );
+                    relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
                 }
 
                 if (_.isUndefined(relationship.otherEntityStateName)) {
-                    relationship.otherEntityStateName = _.kebabCase(
-                        relationship.otherEntityAngularName
-                    );
+                    relationship.otherEntityStateName = _.kebabCase(relationship.otherEntityAngularName);
                 }
                 if (_.isUndefined(relationship.otherEntityModuleName)) {
-                    if (relationship.otherEntityNameCapitalized !== "User") {
+                    if (relationship.otherEntityNameCapitalized !== 'User') {
                         relationship.otherEntityModuleName = `${context.angularXAppName +
                             relationship.otherEntityNameCapitalized}Module`;
-                        relationship.otherEntityFileName = _.kebabCase(
-                            relationship.otherEntityAngularName
-                        );
+                        relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
                         if (
                             context.skipUiGrouping ||
                             otherEntityData === undefined
                         ) {
-                            relationship.otherEntityClientRootFolder = "";
+                            relationship.otherEntityClientRootFolder = '';
                         } else {
                             relationship.otherEntityClientRootFolder =
                                 otherEntityData.clientRootFolder;
@@ -747,7 +638,7 @@ module.exports = class extends BaseGenerator {
                                 relationship.otherEntityModulePath = `${
                                     context.entityParentPathAddition
                                         ? `${context.entityParentPathAddition}/`
-                                        : ""
+                                        : ''
                                 }${otherEntityData.clientRootFolder}/${
                                     relationship.otherEntityFileName
                                 }`;
@@ -762,7 +653,7 @@ module.exports = class extends BaseGenerator {
                             relationship.otherEntityModulePath = `${
                                 context.entityParentPathAddition
                                     ? `${context.entityParentPathAddition}/`
-                                    : ""
+                                    : ''
                             }${relationship.otherEntityFileName}`;
                             relationship.otherEntityModelName =
                                 relationship.otherEntityFileName;
@@ -773,34 +664,34 @@ module.exports = class extends BaseGenerator {
                         relationship.otherEntityModuleName = `${
                             context.angularXAppName
                         }SharedModule`;
-                        relationship.otherEntityModulePath = "app/core";
+                        relationship.otherEntityModulePath = 'app/core';
                     }
                 }
                 // Load in-memory data for root
                 if (
-                    relationship.relationshipType === "many-to-many" &&
+                    relationship.relationshipType === 'many-to-many' &&
                     relationship.ownerSide
                 ) {
                     context.fieldsContainOwnerManyToMany = true;
                 } else if (
-                    relationship.relationshipType === "one-to-one" &&
+                    relationship.relationshipType === 'one-to-one' &&
                     !relationship.ownerSide
                 ) {
                     context.fieldsContainNoOwnerOneToOne = true;
                 } else if (
-                    relationship.relationshipType === "one-to-one" &&
+                    relationship.relationshipType === 'one-to-one' &&
                     relationship.ownerSide
                 ) {
                     context.fieldsContainOwnerOneToOne = true;
-                } else if (relationship.relationshipType === "one-to-many") {
+                } else if (relationship.relationshipType === 'one-to-many') {
                     context.fieldsContainOneToMany = true;
-                } else if (relationship.relationshipType === "many-to-one") {
+                } else if (relationship.relationshipType === 'many-to-one') {
                     context.fieldsContainManyToOne = true;
                 }
 
                 if (
                     relationship.relationshipValidateRules &&
-                    relationship.relationshipValidateRules.includes("required")
+                    relationship.relationshipValidateRules.includes('required')
                 ) {
                     relationship.relationshipValidate = relationship.relationshipRequired = context.validation = true;
                 }
@@ -822,9 +713,9 @@ module.exports = class extends BaseGenerator {
             // write server side files
             this.writeFilesToDisk(serverFiles, this, false);
 
-            if (this.databaseType === "sql") {
+            if (this.databaseType === 'sql') {
                 if (
-                    ["ehcache", "infinispan"].includes(this.cacheProvider) &&
+                    ['ehcache', 'infinispan'].includes(this.cacheProvider) &&
                     this.enableHibernateCache
                 ) {
                     this.addEntityToCache(
@@ -836,7 +727,7 @@ module.exports = class extends BaseGenerator {
                     );
                 }
             }
-            this.fields.forEach(field => {
+            this.fields.forEach((field) => {
                 if (field.fieldIsEnum === true) {
                     const fieldType = field.fieldType;
                     const enumInfo = utils.buildEnumInfo(
@@ -870,6 +761,6 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
-        this.log("End of feign-client generator");
+        this.log('End of feign-client generator');
     }
 };
