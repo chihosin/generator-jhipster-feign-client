@@ -258,6 +258,7 @@ module.exports = class extends BaseGenerator {
                     context.jhipsterConfigDirectory
                 }/${context.entityNameCapitalized}.json`;
                 this.loadEntityJson();
+                context.microserviceName = context.fileData.microserviceName;
             }
             done();
         });
