@@ -1,6 +1,6 @@
 {
     "name": "generator-jhipster-feign-client",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "A JHipster module that create feign client with entity for communication between two microservices",
     "keywords": [
         "yeoman-generator",
