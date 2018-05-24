@@ -1,0 +1,71 @@
+package <%=packageName%>.web.rest.client;
+
+import <%=packageName%>.client.AuthorizedUserFeignClient;
+import <%=packageName%>.web.rest.dto.AuthorityDTO;
+import <%=packageName%>.web.rest.dto.ManagedUsersAuthorityDTO;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@AuthorizedUserFeignClient(name = "<%=uaaBaseName%>", fallback = <%=uaaClassifyBaseName%>AuthorityClientFallback.class)
+public interface <%=uaaClassifyBaseName%>AuthorityClient {
+
+    /**
+     * create a new authority.
+     *
+     * @param authority the authority to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new authority, or with status 400 (Bad Request) if the authority has already an ID
+     */
+    @RequestMapping(value = "/api/authorities",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<AuthorityDTO> createAuthority(@Valid @RequestBody AuthorityDTO authority);
+
+    /**
+     * get all the authorities.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of authorities in body
+     */
+    @RequestMapping(value = "/api/authorities",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<AuthorityDTO>> getAllAuthorities();
+
+    /**
+     * get the "name" authority.
+     *
+     * @param name the name of the authority to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the authority, or with status 404 (Not Found)
+     */
+    @RequestMapping(value = "/api/authorities/{name}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<AuthorityDTO> getAuthority(@PathVariable("name") String name);
+
+    /**
+     * delete the "name" authority.
+     *
+     * @param name the id of the authority to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @RequestMapping(value = "/api/authorities/{name}",
+        method = RequestMethod.DELETE,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> deleteAuthority(@PathVariable("name") String name);
+
+    @RequestMapping(value = "/api/authorities/users",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> managedUsersAuthority(@RequestBody ManagedUsersAuthorityDTO managedUsersAuthorityDTO);
+}

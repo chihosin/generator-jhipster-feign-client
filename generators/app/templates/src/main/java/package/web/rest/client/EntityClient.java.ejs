@@ -44,8 +44,8 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 /**
  * Feign Client for managing <%= entityClass %>.
  */
-@AuthorizedUserFeignClient(name = "<%= entityInstance %>", fallback = <%= entityClass %>ClientFallback.class)
-public interface <%= entityClass %>Client {
+@AuthorizedUserFeignClient(name = "<%= entityInstance %>", fallback = <%= microserviceName %><%= entityClass %>ClientFallback.class)
+public interface <%= microserviceName %><%= entityClass %>Client {
     <%_
     const instanceType = entityClass + 'DTO';
     const instanceName = entityInstance + 'DTO';

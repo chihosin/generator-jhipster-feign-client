@@ -1,0 +1,57 @@
+package <%=packageName%>.web.rest.client;
+
+import <%=packageName%>.client.AuthorizedUserFeignClient;
+import <%=packageName%>.web.rest.dto.UserDTO;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@AuthorizedUserFeignClient(name = "<%=uaaBaseName%>", fallback = <%=uaaClassifyBaseName%>UserClientFallback.class)
+public interface <%=uaaClassifyBaseName%>UserClient {
+
+    /**
+     * create a new authority.
+     */
+    @RequestMapping(value = "/api/users",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO);
+
+    @RequestMapping(value = "/api/users",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO);
+
+    /**
+     * get all the authorities.
+     */
+    @RequestMapping(value = "/api/users",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<UserDTO>> getAllAuthorities();
+
+    @RequestMapping(value = "/api/users/{login}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<UserDTO> getUser(@PathVariable("login") String login);
+
+    /**
+     * delete the "name" authority.
+     */
+    @RequestMapping(value = "/api/users/{name}",
+        method = RequestMethod.DELETE,
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Void> deleteUser(@PathVariable("name") String name);
+
+}

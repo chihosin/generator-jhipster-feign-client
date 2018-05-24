@@ -1,0 +1,47 @@
+package <%=packageName%>.web.rest.client;
+
+import <%=packageName%>.web.rest.dto.AuthorityDTO;
+import <%=packageName%>.web.rest.dto.ManagedUsersAuthorityDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@Component
+public class <%=uaaClassifyBaseName%>AuthorityClientFallback implements <%=uaaClassifyBaseName%>AuthorityClient {
+
+    private final Logger log = LoggerFactory.getLogger(<%=uaaClassifyBaseName%>AuthorityClientFallback.class);
+
+    @Override
+    public ResponseEntity<AuthorityDTO> createAuthority(@Valid AuthorityDTO authority) {
+        log.warn("Triggered fallback for createAuthority: {}", authority);
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<List<AuthorityDTO>> getAllAuthorities() {
+        log.warn("Triggered fallback for getAllAuthorities");
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<AuthorityDTO> getAuthority(@PathVariable("name") String name) {
+        log.warn("Triggered fallback for getAuthority: {}", name);
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteAuthority(@PathVariable("name") String name) {
+        log.warn("Triggered fallback for deleteAuthority");
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> managedUsersAuthority(ManagedUsersAuthorityDTO managedUsersAuthorityDTO) {
+        return null;
+    }
+}

@@ -49,7 +49,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
  * Client Fallback for managing <%= entityClass %>.
  */
 @Component
-public class <%= entityClass %>ClientFallback implements <%= entityClass %>Client {
+public class <%= microserviceName %><%= entityClass %>ClientFallback implements <%= microserviceName %><%= entityClass %>Client {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>ClientFallback.class);
 
