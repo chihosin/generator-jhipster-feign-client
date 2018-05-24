@@ -1,7 +1,8 @@
 {
   "name": "generator-jhipster-feign-client",
-  "version": "1.0.1",
-  "description": "A JHipster module that create feign client with entity for communication between two microservices",
+  "version": "1.0.2",
+  "description":
+    "A JHipster module that create feign client with entity for communication between two microservices",
   "keywords": [
     "yeoman-generator",
     "jhipster-module",
@@ -16,9 +17,7 @@
     "email": "chihosin@icloud.com",
     "url": "https://github.com/ChihoSin"
   },
-  "files": [
-    "generators"
-  ],
+  "files": ["generators"],
   "main": "generators/app/index.js",
   "repository": {
     "type": "git",
@@ -26,7 +25,7 @@
   },
   "dependencies": {
     "chalk": "2.1.0",
-    "generator-jhipster": ">=4.6.0",
+    "generator-jhipster": "^5.0.0-beta.1",
     "jhipster-core": "^2.0.3",
     "lodash": "^4.17.10",
     "mkdirp": "0.5.1",
@@ -49,9 +48,12 @@
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "release": "git push && git push --tags && npm publish",
-    "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
-    "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
-    "release:major": "npm version major -a -m \"Update to %s\" && npm run release",
+    "release:patch":
+      "npm version patch -a -m \"Update to %s\" && npm run release",
+    "release:minor":
+      "npm version minor -a -m \"Update to %s\" && npm run release",
+    "release:major":
+      "npm version major -a -m \"Update to %s\" && npm run release",
     "test": "mocha test/*"
   },
   "license": "MIT",
