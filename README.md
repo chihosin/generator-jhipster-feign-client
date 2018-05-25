@@ -2,7 +2,7 @@
 
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 
-> JHipster module, A JHipster module that create feign client with entity for communication between two microservices
+> JHipster module for create feign client with entity for communication between two microservices
 
 # Introduction
 
@@ -47,8 +47,8 @@ npm update -g generator-jhipster-feign-client
 # Usage
 
 ```bash
-# Create feign client for microservice
-yo jhipster-feign-client <entityName> --[options]
+# Create feign client for microservice or uaa service
+yo jhipster-feign-client
 ```
 
 # License
