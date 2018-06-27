@@ -32,6 +32,10 @@ public class UserDTO implements Serializable {
     @Size(min = 5, max = 254)
     private String email;
 
+    @Size(min = 5, max = 50)
+    @Pattern(regexp = "^[0-9]*$")
+    private String phoneNumber;
+
     @Size(max = 256)
     private String imageUrl;
 
@@ -94,6 +98,14 @@ public class UserDTO implements Serializable {
         this.email = email;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    
     public String getImageUrl() {
         return imageUrl;
     }
