@@ -267,36 +267,34 @@ module.exports = class extends BaseGenerator {
             }
         };
 
-        const prompts = !this.uaaAuthentication
-            ? askMicroservicePath
-            : [
-                {
-                    type: 'list',
-                    name: 'clientType',
-                    message: 'Which feign client do you want to generate?',
-                    choices: [
-                        {
-                            name: 'other microservice entities',
-                            value: 'microservice'
-                        },
-                        {
-                            name: 'uaa service user and authority entities',
-                            value: 'uaa'
-                        }
-                    ],
-                    default: 'microservice'
-                },
-                askMicroservicePath,
-                {
-                    when: response => response.clientType === 'microservice',
-                    type: 'checkbox',
-                    name: 'entitiesNames',
-                    message: 'Please choose the entities to be audited',
-                    choices: response =>
-                        getEntityList(response.microservicePath),
-                    default: 'none'
-                }
-            ];
+        const prompts = [
+            {
+                type: 'list',
+                name: 'clientType',
+                message: 'Which feign client do you want to generate?',
+                choices: [
+                    {
+                        name: 'other microservice entities',
+                        value: 'microservice'
+                    },
+                    {
+                        name: 'uaa service user and authority entities',
+                        value: 'uaa'
+                    }
+                ],
+                default: 'microservice'
+            },
+            askMicroservicePath,
+            {
+                when: response => response.clientType === 'microservice',
+                type: 'checkbox',
+                name: 'entitiesNames',
+                message: 'Please choose the entities to be audited',
+                choices: response =>
+                    getEntityList(response.microservicePath),
+                default: 'none'
+            }
+        ];
 
         const done = this.async();
         this.prompt(prompts).then((props) => {
